@@ -1,9 +1,14 @@
-.link-underline {
+.news-card__link-underline {
     color: black;
     text-decoration: none;
 }
 
-.link-underline:hover {
+.news-card__link-underline:hover {
     color: black;
     opacity: 0.7;
+}
+
+.news-card {
+    height: 100%;
+    width: 100%;
 }

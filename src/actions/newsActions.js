@@ -5,7 +5,7 @@ import {
     LATEST_NEWS_LIST_FAIL,
 } from "../constants/newsConstants";
 
-export const latestNewsListAction = () => async (dispatch) => {
+export const latestNewsListAction = (sort) => async (dispatch) => {
     try {
         dispatch({type: LATEST_NEWS_LIST_REQUEST})
 
@@ -20,10 +20,28 @@ export const latestNewsListAction = () => async (dispatch) => {
             config
         )
 
-        dispatch({
-            type: LATEST_NEWS_LIST_SUCCESS,
-            payload: data
-        })
+        if (sort.sortByTitle) {
+            dispatch({
+                type: LATEST_NEWS_LIST_SUCCESS,
+                payload: data.sort((a, b) => a.title > b.title && 1 || -1)
+            })
+        } else if (sort.sortByOldestDate) {
+            dispatch({
+                type: LATEST_NEWS_LIST_SUCCESS,
+                payload: data.sort((a, b) => a.time > b.time && 1 || -1)
+            })
+        } else if (sort.sortByNewestDate) {
+            dispatch({
+                type: LATEST_NEWS_LIST_SUCCESS,
+                payload: data.sort((a, b) => a.time < b.time && 1 || -1)
+            })
+        } else {
+            dispatch({
+                type: LATEST_NEWS_LIST_SUCCESS,
+                payload: data
+            })
+        }
+
 
     } catch (error) {
         dispatch({

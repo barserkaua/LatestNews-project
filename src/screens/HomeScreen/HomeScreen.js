@@ -2,11 +2,11 @@ import React, {Suspense, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Row, Col} from "react-bootstrap";
 import Loader from "../../components/Loader/Loader";
-import Message from "../../components/Message/Message";
 
 import {latestNewsListAction} from "../../actions/newsActions";
 
 const NewsCard = React.lazy(() => import('../../components/NewsCard/NewsCard'));
+const SortMenu = React.lazy(() => import('../../components/SortMenu/SortMenu'));
 
 export default function HomeScreen() {
 
@@ -17,11 +17,20 @@ export default function HomeScreen() {
 
 
     const latestNewsList = useSelector(state => state.latestNewsList);
-    const {loading, success, error, latestNews} = latestNewsList;
+    const {success, latestNews} = latestNewsList;
+
+    const newsSortByTitle = useSelector(state => state.newsSortByTitle);
+    const {sortByTitle} = newsSortByTitle;
+
+    const newsSortByOldestDate = useSelector(state => state.newsSortByOldestDate);
+    const {sortByOldestDate} = newsSortByOldestDate;
+
+    const newsSortByNewestDate = useSelector(state => state.newsSortByNewestDate);
+    const {sortByNewestDate} = newsSortByNewestDate;
 
     useEffect(() => {
-        dispatch(latestNewsListAction())
-    }, [dispatch])
+        dispatch(latestNewsListAction({sortByTitle, sortByOldestDate, sortByNewestDate}))
+    }, [dispatch, sortByTitle, sortByOldestDate, sortByNewestDate])
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
@@ -46,13 +55,16 @@ export default function HomeScreen() {
         <div>
             { success ?
                 <Row>
-                    {latestNews.slice(0, numOnPage).map(news => (
-                        <Col className="my-3" key={news.id} md={4}>
-                            <Suspense fallback={<Loader/>}>
+                    <Suspense fallback={<div/>}>
+                        <SortMenu/>
+                    </Suspense>
+                    <Suspense fallback={<Loader/>}>
+                        {latestNews.slice(0, numOnPage).map(news => (
+                            <Col className="my-3" key={news.id} md={4}>
                                 <NewsCard news={news}/>
-                            </Suspense>
-                        </Col>
-                    ))}
+                            </Col>
+                        ))}
+                    </Suspense>
                     {loader ? <Loader/> : <div/>}
                     </Row>
                 : <div/>

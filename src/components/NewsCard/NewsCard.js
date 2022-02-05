@@ -5,18 +5,19 @@ import './NewsCard.css';
 
 export default function NewsCard({news}) {
 
+    const newsTime = new Date(news.time*1000).toLocaleString('en-GB',{timeZone:'UTC'})
 
     return (
-        <Card style={{ width: '100%', height:'100%' }}>
+        <Card className="news-card">
             <Card.Body>
                 <Card.Title >
-                    <NavLink to={`/${news.title}`} className="link-underline">
+                    <NavLink to={`/${news.title}`} className="news-card news-card__link-underline">
                         {news.title}
                     </NavLink>
                 </Card.Title>
                 <Card.Link >{news.domain}</Card.Link>
                 <Card.Text>
-                    {Date(news.time).slice(0, 24)}
+                    {newsTime}
                 </Card.Text>
                 <Button variant="primary">Go somewhere</Button>
             </Card.Body>

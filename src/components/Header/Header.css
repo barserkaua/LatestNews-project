@@ -1,0 +1,23 @@
+.brand-link {
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: #1a8639;
+    margin: 0 10px;
+}
+
+.brand-link:hover {
+    color: #ffffff;
+}
+
+.navigation-btn {
+    color: #ffffff;
+    margin: 0 20px;
+    text-decoration: none;
+}
+
+.navigation-btn:hover {
+    color: #ffffff;
+    opacity: 0.7;
+    text-decoration-color: #e1bee7;
+    text-decoration-line: underline;
+}

@@ -16,8 +16,13 @@ export default function Header() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <NavLink className="navigation-btn" to="/home">Home</NavLink>
-                            <NavLink className="navigation-btn" to="/some">Link</NavLink>
+                            <NavLink className="navigation-btn" to="/individual-items">Individual items</NavLink>
+                        </Nav>
+                        <Nav>
+                            <Nav.Link
+                                target="_blank"
+                                href="https://github.com/barserkaua/LatestNews-project">
+                                <i className="fab fa-github"></i>GitHub Repo</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

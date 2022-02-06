@@ -11,9 +11,9 @@ export default function NewsCard({news}) {
         <Card className="news-card">
             <Card.Body className="news-card news-card__body">
                 <Card.Title className="news-card news-card__title">
-                    <NavLink to={`/${news.title}`} className="news-card news-card__link-underline">
+                    <Card.Link target="_blank" href={news.url} className="news-card news-card__link-underline">
                         {news.title}
-                    </NavLink>
+                    </Card.Link>
                 </Card.Title>
                 <Card.Text className="news-card news-card__domain">
                     Domain: <Card.Link>{news.domain}</Card.Link>

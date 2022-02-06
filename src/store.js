@@ -8,6 +8,7 @@ import {
     newsSortByOldestDateReducer,
     newsSortByNewestDateReducer,
 } from "./reducers/sortReducers";
+import {itemsListReducer} from "./reducers/itemsReducers";
 
 
 const reducer = combineReducers({
@@ -17,6 +18,8 @@ const reducer = combineReducers({
     newsSortByTitle: newsSortByTitleReducer,
     newsSortByOldestDate: newsSortByOldestDateReducer,
     newsSortByNewestDate: newsSortByNewestDateReducer,
+
+    itemsList:itemsListReducer,
 })
 
 

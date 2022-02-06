@@ -2,6 +2,7 @@ import React, {Suspense, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Row, Col} from "react-bootstrap";
 import Loader from "../../components/Loader/Loader";
+import Message from "../../components/Message/Message";
 
 import {latestNewsListAction} from "../../actions/newsActions";
 
@@ -17,10 +18,10 @@ export default function HomeScreen() {
 
 
     const latestNewsList = useSelector(state => state.latestNewsList);
-    const {success, latestNews} = latestNewsList;
+    const {loading, error, success, latestNews} = latestNewsList;
 
     const newsSortByTitle = useSelector(state => state.newsSortByTitle);
-    const {loading:loaddd, sortByTitle} = newsSortByTitle;
+    const {sortByTitle} = newsSortByTitle;
 
     const newsSortByOldestDate = useSelector(state => state.newsSortByOldestDate);
     const {sortByOldestDate} = newsSortByOldestDate;
@@ -33,14 +34,14 @@ export default function HomeScreen() {
     }, [dispatch, sortByTitle, sortByOldestDate, sortByNewestDate])
 
     useEffect(() => {
-        document.addEventListener('scroll', scrollHandler)
+        document.addEventListener('scroll', scrollHandlerNews)
 
         return function () {
-            document.removeEventListener('scroll', scrollHandler)
+            document.removeEventListener('scroll', scrollHandlerNews)
         }
     },)
 
-    const scrollHandler = (e) => {
+    const scrollHandlerNews = (e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100
             && latestNews.length > numOnPage) {
             setLoader(true)
@@ -51,23 +52,23 @@ export default function HomeScreen() {
         }
     }
 
-
     return (
         <div>
-            {loaddd && <Loader/>}
-            { success ?
-                <Row className="position-relative">
-                    <Suspense fallback={<div/>}>
-                        <SortMenu/>
-                    </Suspense>
-                    <Suspense fallback={<Loader/>}>
-                        {latestNews.slice(0, numOnPage).map(news => (
-                            <Col className="my-3" key={news.id} md={6} lg={6} xl={4}>
-                                <NewsCard news={news}/>
-                            </Col>
-                        ))}
-                    </Suspense>
-                    {loader ? <Loader/> : <div/>}
+            { loading ? <Loader/>
+                : error ? <Message variant="danger">{error}</Message>
+                    : success ?
+                    <Row className="position-relative">
+                        <Suspense fallback={<div/>}>
+                            <SortMenu/>
+                        </Suspense>
+                        <Suspense fallback={<Loader/>}>
+                            {latestNews.slice(0, numOnPage).map(news => (
+                                <Col className="my-3" key={news.id} md={6} lg={6} xl={4}>
+                                    <NewsCard news={news}/>
+                                </Col>
+                            ))}
+                        </Suspense>
+                        {loader ? <Loader/> : <div/>}
                     </Row>
                 : <div/>
             }

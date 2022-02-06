@@ -48,7 +48,7 @@ export default function SortMenu() {
     }
 
     return (
-        <div>
+        <div className="sort-menu">
             <Col xs="auto" className='mt-auto d-flex justify-content-end'>
                 <select size='sm' className="form-select" onChange={e => sortHandler(e.target.value)}>
                     <option selected hidden>Sort By</option>

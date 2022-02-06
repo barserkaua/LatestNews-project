@@ -20,7 +20,7 @@ export default function HomeScreen() {
     const {success, latestNews} = latestNewsList;
 
     const newsSortByTitle = useSelector(state => state.newsSortByTitle);
-    const {sortByTitle} = newsSortByTitle;
+    const {loading:loaddd, sortByTitle} = newsSortByTitle;
 
     const newsSortByOldestDate = useSelector(state => state.newsSortByOldestDate);
     const {sortByOldestDate} = newsSortByOldestDate;
@@ -51,16 +51,18 @@ export default function HomeScreen() {
         }
     }
 
+
     return (
         <div>
+            {loaddd && <Loader/>}
             { success ?
-                <Row>
+                <Row className="position-relative">
                     <Suspense fallback={<div/>}>
                         <SortMenu/>
                     </Suspense>
                     <Suspense fallback={<Loader/>}>
                         {latestNews.slice(0, numOnPage).map(news => (
-                            <Col className="my-3" key={news.id} md={4}>
+                            <Col className="my-3" key={news.id} md={6} lg={6} xl={4}>
                                 <NewsCard news={news}/>
                             </Col>
                         ))}

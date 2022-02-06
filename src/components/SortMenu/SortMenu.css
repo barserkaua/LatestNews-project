@@ -1,13 +1,22 @@
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 570px) {
+
+    .sort-menu {
+        position: sticky;
+        top: 0;
+        background: white;
+        width: 100%;
+        z-index: 4;
+    }
+
     .form-select {
-        max-width: 40%;
+        max-width: 100%;
         text-align: center;
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (min-width: 570px) {
     .form-select {
-        max-width: 30%;
+        max-width: 40%;
         text-align: center;
     }
 }
@@ -16,5 +25,7 @@
     .form-select {
         max-width: 20%;
         text-align: center;
+        position: sticky;
+        top: 100px;
     }
 }

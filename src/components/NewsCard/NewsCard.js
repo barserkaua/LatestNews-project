@@ -1,7 +1,7 @@
 import {Card, Button} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 
-import './NewsCard.css';
+import './NewsCard.scss';
 
 export default function NewsCard({news}) {
 
@@ -9,17 +9,21 @@ export default function NewsCard({news}) {
 
     return (
         <Card className="news-card">
-            <Card.Body>
-                <Card.Title >
+            <Card.Body className="news-card news-card__body">
+                <Card.Title className="news-card news-card__title">
                     <NavLink to={`/${news.title}`} className="news-card news-card__link-underline">
                         {news.title}
                     </NavLink>
                 </Card.Title>
-                <Card.Link >{news.domain}</Card.Link>
-                <Card.Text>
-                    {newsTime}
+                <Card.Text className="news-card news-card__domain">
+                    Domain: <Card.Link>{news.domain}</Card.Link>
                 </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <div className="news-card news-card__footer">
+                    <Button target="_blank" href={news.url} variant="primary">Read more</Button>
+                    <Card.Text className="news-card news-card__date">
+                        {newsTime}
+                    </Card.Text>
+                </div>
             </Card.Body>
         </Card>
     )

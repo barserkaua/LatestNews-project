@@ -24,9 +24,7 @@ export default function ItemScreen() {
     const itemsList = useSelector(state => state.itemsList);
     const {loading, error, success, items} = itemsList;
 
-    useEffect(() => {
-        dispatch(itemsListAction())
-    }, [dispatch])
+
 
     useEffect(() => {
         if (success) {

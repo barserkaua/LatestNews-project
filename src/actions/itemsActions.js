@@ -6,7 +6,7 @@ import {
 } from "../constants/itemsConstants";
 
 
-export const itemsListAction = () => async (dispatch) => {
+export const itemsListAction = (sort) => async (dispatch) => {
     try {
         dispatch({type: ITEMS_LIST_REQUEST})
 
@@ -21,10 +21,27 @@ export const itemsListAction = () => async (dispatch) => {
             config
         )
 
-        dispatch({
-            type: ITEMS_LIST_SUCCESS,
-            payload: data.comments
-        })
+        if (sort.sortByTitle) {
+            dispatch({
+                type: ITEMS_LIST_SUCCESS,
+                payload: data.comments.sort((a, b) => a.title > b.title && 1 || -1)
+            })
+        } else if (sort.sortByOldestDate) {
+            dispatch({
+                type: ITEMS_LIST_SUCCESS,
+                payload: data.comments.sort((a, b) => a.time > b.time && 1 || -1)
+            })
+        } else if (sort.sortByNewestDate) {
+            dispatch({
+                type: ITEMS_LIST_SUCCESS,
+                payload: data.comments.sort((a, b) => a.time < b.time && 1 || -1)
+            })
+        } else {
+            dispatch({
+                type: ITEMS_LIST_SUCCESS,
+                payload: data.comments
+            })
+        }
 
 
     } catch (error) {

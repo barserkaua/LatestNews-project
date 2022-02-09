@@ -1,4 +1,5 @@
 import axios from "axios";
+import {sortBy} from "lodash/collection";
 import {
     ITEMS_LIST_REQUEST,
     ITEMS_LIST_SUCCESS,
@@ -6,7 +7,7 @@ import {
 } from "../constants/itemsConstants";
 
 
-export const itemsListAction = (sort) => async (dispatch) => {
+export const itemsListAction = (sort=undefined) => async (dispatch) => {
     try {
         dispatch({type: ITEMS_LIST_REQUEST})
 
@@ -24,17 +25,17 @@ export const itemsListAction = (sort) => async (dispatch) => {
         if (sort.sortByTitle) {
             dispatch({
                 type: ITEMS_LIST_SUCCESS,
-                payload: data.comments.sort((a, b) => a.title > b.title && 1 || -1)
+                payload: sortBy(data.comments, (item) => item.content)
             })
         } else if (sort.sortByOldestDate) {
             dispatch({
                 type: ITEMS_LIST_SUCCESS,
-                payload: data.comments.sort((a, b) => a.time > b.time && 1 || -1)
+                payload: sortBy(data.comments, (item) => item.time)
             })
         } else if (sort.sortByNewestDate) {
             dispatch({
                 type: ITEMS_LIST_SUCCESS,
-                payload: data.comments.sort((a, b) => a.time < b.time && 1 || -1)
+                payload: sortBy(data.comments, (item) => item.time).reverse()
             })
         } else {
             dispatch({

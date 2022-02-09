@@ -1,4 +1,5 @@
 import axios from "axios";
+import {sortBy} from "lodash/collection";
 import {
     LATEST_NEWS_LIST_REQUEST,
     LATEST_NEWS_LIST_SUCCESS,
@@ -23,17 +24,18 @@ export const latestNewsListAction = (sort) => async (dispatch) => {
         if (sort.sortByTitle) {
             dispatch({
                 type: LATEST_NEWS_LIST_SUCCESS,
-                payload: data.sort((a, b) => a.title > b.title && 1 || -1)
+                payload: sortBy(data, (item) => item.title)
+                // payload: data.sort((a, b) => a.title > b.title && 1 || -1)
             })
         } else if (sort.sortByOldestDate) {
             dispatch({
                 type: LATEST_NEWS_LIST_SUCCESS,
-                payload: data.sort((a, b) => a.time > b.time && 1 || -1)
+                payload: sortBy(data, (item) => item.time)
             })
         } else if (sort.sortByNewestDate) {
             dispatch({
                 type: LATEST_NEWS_LIST_SUCCESS,
-                payload: data.sort((a, b) => a.time < b.time && 1 || -1)
+                payload: sortBy(data, (item) => item.time).reverse()
             })
         } else {
             dispatch({

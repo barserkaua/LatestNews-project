@@ -31,6 +31,7 @@ export default function IndividualItemsScreen() {
 
     useEffect(() => {
         dispatch(itemsListAction({sortByTitle, sortByOldestDate, sortByNewestDate}))
+        document.title = 'Individual Items';
     },[dispatch, sortByTitle, sortByOldestDate, sortByNewestDate])
 
     useEffect(() => {

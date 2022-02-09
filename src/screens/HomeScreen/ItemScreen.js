@@ -5,10 +5,8 @@ import {Col, Row} from "react-bootstrap";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
 
-import {itemsListAction} from "../../actions/itemsActions";
-
-
 const UserComments = React.lazy(() => import('../../components/UserCommentsCard/UserCommentsCard'));
+
 
 export default function ItemScreen() {
 
@@ -27,6 +25,8 @@ export default function ItemScreen() {
 
 
     useEffect(() => {
+
+
         if (success) {
             items.forEach(item => {
                 if (item.id === currentUserId) {
@@ -35,7 +35,11 @@ export default function ItemScreen() {
                 }
             })
         }
-    }, [success])
+    }, [dispatch, success])
+
+    useEffect(() => {
+        document.title = `User: ${userName}`;
+    })
 
     return (
         <div>

@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Row, Col} from "react-bootstrap";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
+import uniq from "lodash/uniq";
 
 import {latestNewsListAction} from "../../actions/newsActions";
 
@@ -31,6 +32,7 @@ export default function HomeScreen() {
 
     useEffect(() => {
         dispatch(latestNewsListAction({sortByTitle, sortByOldestDate, sortByNewestDate}))
+        document.title = 'Home screen';
     }, [dispatch, sortByTitle, sortByOldestDate, sortByNewestDate])
 
     useEffect(() => {
@@ -70,6 +72,7 @@ export default function HomeScreen() {
                         </Suspense>
                         {loader ? <Loader/> : <div/>}
                     </Row>
+
                 : <div/>
             }
         </div>

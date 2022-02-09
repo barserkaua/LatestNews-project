@@ -1,9 +1,11 @@
 import {Card} from "react-bootstrap";
-
+import {useEffect} from "react";
 
 export default function UserCommentsCard({comment}) {
 
     const commentTime = new Date(comment.time*1000).toLocaleString('en-GB',{timeZone:'UTC'})
+
+
 
     return (
         <Card>

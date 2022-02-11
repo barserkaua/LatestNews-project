@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Col} from "react-bootstrap";
 import './SortMenu.css'
 
@@ -18,21 +18,11 @@ export default function SortMenu() {
 
     const dispatch = useDispatch();
 
-    const newsSortByTitle = useSelector(state => state.newsSortByTitle);
-    const {sortByTitle} = newsSortByTitle;
-
-    const newsSortByOldestDate = useSelector(state => state.newsSortByOldestDate);
-    const {sortByOldestDate} = newsSortByOldestDate;
-
-    const newsSortByNewestDate = useSelector(state => state.newsSortByNewestDate);
-    const {sortByNewestDate} = newsSortByNewestDate;
-
     function sortHandler(e) {
         if (e === 'title') {
             dispatch(newsSortByTitleActions());
             dispatch({type:NEWS_SORT_BY_DATE_OLD_RESET})
             dispatch({type:NEWS_SORT_BY_DATE_NEW_RESET})
-
         }
         if (e === 'date-oldest') {
             dispatch(newsSortByOldestDateActions());
@@ -52,9 +42,9 @@ export default function SortMenu() {
             <Col xs="auto" className='mt-auto d-flex justify-content-end'>
                 <select size='sm' className="form-select" onChange={e => sortHandler(e.target.value)}>
                     <option selected hidden>Sort By</option>
-                    <option value="title" selected={true ? sortByTitle : false}>Title</option>
-                    <option value="date-oldest" selected={true ? sortByOldestDate : false}>Date added: oldest</option>
-                    <option value="date-newest" selected={true ? sortByNewestDate : false}>Date added: newest</option>
+                    <option value="title">Title</option>
+                    <option value="date-oldest">Date added: oldest</option>
+                    <option value="date-newest">Date added: newest</option>
                 </select>
             </Col>
         </div>

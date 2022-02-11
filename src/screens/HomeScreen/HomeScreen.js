@@ -3,23 +3,24 @@ import {useDispatch, useSelector} from "react-redux";
 import {Row, Col} from "react-bootstrap";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
-import uniq from "lodash/uniq";
 
 import {latestNewsListAction} from "../../actions/newsActions";
 
 const NewsCard = React.lazy(() => import('../../components/NewsCard/NewsCard'));
 const SortMenu = React.lazy(() => import('../../components/SortMenu/SortMenu'));
 
+
 export default function HomeScreen() {
 
     const dispatch = useDispatch();
 
-    const [numOnPage, setNumOnPage] = useState(9);
-    const [loader, setLoader] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loadNews, setLoadNews] = useState([]);
+    const [fetching, setFetching] = useState(true);
 
 
     const latestNewsList = useSelector(state => state.latestNewsList);
-    const {loading, error, success, latestNews} = latestNewsList;
+    const {success, latestNews} = latestNewsList;
 
     const newsSortByTitle = useSelector(state => state.newsSortByTitle);
     const {sortByTitle} = newsSortByTitle;
@@ -30,51 +31,67 @@ export default function HomeScreen() {
     const newsSortByNewestDate = useSelector(state => state.newsSortByNewestDate);
     const {sortByNewestDate} = newsSortByNewestDate;
 
+    // Take data Effect from API
     useEffect(() => {
-        dispatch(latestNewsListAction({sortByTitle, sortByOldestDate, sortByNewestDate}))
+        if (fetching) {
+            console.log("fetching")
+            dispatch(latestNewsListAction(currentPage))
+        }
         document.title = 'Home screen';
-    }, [dispatch, sortByTitle, sortByOldestDate, sortByNewestDate])
+    }, [dispatch, fetching])
 
+    // load data from global state to our local state, where we have all data from each page that was loading
+    useEffect(() => {
+        if (success) {
+            setLoadNews([...loadNews, ...latestNews])
+            setFetching(false)
+            setCurrentPage(currentPage + 1)
+        }
+    }, [success])
+
+    // we check, if we scrolled our page in bottom, and if true we load new data
+    const scrollHandlerNews = (e) => {
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100
+            && latestNews.length > currentPage) {
+            setFetching(true)
+        }
+    }
+
+    // we activate our componentDidMount effect on our scroll Handler
     useEffect(() => {
         document.addEventListener('scroll', scrollHandlerNews)
 
         return function () {
             document.removeEventListener('scroll', scrollHandlerNews)
         }
-    },)
+    })
 
-    const scrollHandlerNews = (e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100
-            && latestNews.length > numOnPage) {
-            setLoader(true)
-            setTimeout(() => {
-                setLoader(false)
-                setNumOnPage(numOnPage+9)
-            }, 2000)
-        }
+
+    // Sort menu
+    if (sortByTitle) {
+        loadNews.sort((a, b) => a.title > b.title && 1 || -1)
+    }
+    if (sortByOldestDate) {
+        loadNews.sort((a, b) => a.time > b.time && 1 || -1)
+    }
+    if (sortByNewestDate) {
+        loadNews.sort((a, b) => a.time < b.time && 1 || -1)
     }
 
     return (
         <div>
-            { loading ? <Loader/>
-                : error ? <Message variant="danger">{error}</Message>
-                    : success ?
-                    <Row className="position-relative">
-                        <Suspense fallback={<div/>}>
-                            <SortMenu/>
-                        </Suspense>
-                        <Suspense fallback={<Loader/>}>
-                            {latestNews.slice(0, numOnPage).map(news => (
-                                <Col className="my-3" key={news.id} md={6} lg={6} xl={4}>
-                                    <NewsCard news={news}/>
-                                </Col>
-                            ))}
-                        </Suspense>
-                        {loader ? <Loader/> : <div/>}
-                    </Row>
-
-                : <div/>
-            }
+            <Row className="position-relative">
+                <Suspense fallback={<Loader/>}>
+                    <SortMenu/>
+                </Suspense>
+                <Suspense fallback={<Loader/>}>
+                    {loadNews.map((news, index) => (
+                        <Col className="my-3" key={index} md={6} lg={6} xl={4}>
+                            <NewsCard news={news}/>
+                        </Col>
+                    ))}
+                </Suspense>
+            </Row>
         </div>
     )
 }

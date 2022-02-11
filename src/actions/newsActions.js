@@ -1,12 +1,11 @@
 import axios from "axios";
-import {sortBy} from "lodash/collection";
 import {
     LATEST_NEWS_LIST_REQUEST,
     LATEST_NEWS_LIST_SUCCESS,
     LATEST_NEWS_LIST_FAIL,
 } from "../constants/newsConstants";
 
-export const latestNewsListAction = (sort) => async (dispatch) => {
+export const latestNewsListAction = (currentPage) => async (dispatch) => {
     try {
         dispatch({type: LATEST_NEWS_LIST_REQUEST})
 
@@ -17,33 +16,14 @@ export const latestNewsListAction = (sort) => async (dispatch) => {
         }
 
         const {data} = await axios.get(
-            'https://api.hnpwa.com/v0/news/1.json',
+            `https://api.hnpwa.com/v0/news/${currentPage}.json`,
             config
         )
 
-        if (sort.sortByTitle) {
-            dispatch({
-                type: LATEST_NEWS_LIST_SUCCESS,
-                payload: sortBy(data, (item) => item.title)
-                // payload: data.sort((a, b) => a.title > b.title && 1 || -1)
-            })
-        } else if (sort.sortByOldestDate) {
-            dispatch({
-                type: LATEST_NEWS_LIST_SUCCESS,
-                payload: sortBy(data, (item) => item.time)
-            })
-        } else if (sort.sortByNewestDate) {
-            dispatch({
-                type: LATEST_NEWS_LIST_SUCCESS,
-                payload: sortBy(data, (item) => item.time).reverse()
-            })
-        } else {
-            dispatch({
-                type: LATEST_NEWS_LIST_SUCCESS,
-                payload: data
-            })
-        }
-
+        dispatch({
+            type: LATEST_NEWS_LIST_SUCCESS,
+            payload: data
+        })
 
     } catch (error) {
         dispatch({
